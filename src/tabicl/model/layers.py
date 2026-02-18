@@ -781,7 +781,9 @@ class InducedSelfAttentionBlock(nn.Module):
 
         # When using cache, we need consistent batch dimensions, so we don't apply skip_mask
         # The cache was populated with the full batch shape
-        skip_mask = (src == self.skip_value).all(dim=(-2, -1))
+        
+        skip_mask = (src == self.skip_value).all(dim=-1).all(dim=-1)
+            
         if skip_mask.all():
             return torch.full_like(src, self.skip_value)
         else:
